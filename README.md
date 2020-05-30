@@ -22,3 +22,6 @@ TBD
 
 ## License
 MIT © Baran Yildirim
+
+## Fork for
+支持中文环境；时间阈值支持小数；更换了告警声。
