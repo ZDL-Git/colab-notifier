@@ -22,8 +22,8 @@ chrome.runtime.onConnect.addListener(port => {
 
 });
 
-const audio = new Audio('./assets/sounds/zapsplat.mp3');
-
+const audio = new Audio('./assets/sounds/Air Horn-SoundBible.com-964603082.wav');
+// audio.volume = 0.6;
 
 function showFinishedCellNotification(runtime) {
     const timestamp = new Date().getTime();
@@ -49,13 +49,9 @@ async function getValueFromStorage(key) {
 
 async function finishedRunning(message) {
 
-    const thresholdMs = parseInt((await getValueFromStorage('thresholdMinutes')).thresholdMinutes) * 60000;
+    const thresholdMs = parseFloat((await getValueFromStorage('thresholdMinutes')).thresholdMinutes) * 60000;
     const notifySound = (await getValueFromStorage('notifySound')).notifySound;
     const notifyMessage = (await getValueFromStorage('notifyMessage')).notifyMessage;
-
-    if (isNaN(thresholdMs)) {
-        thresholdMs = 15 * 60000;
-    }
 
     if (message.runtimeMs >= thresholdMs) {
         if (notifySound) {
