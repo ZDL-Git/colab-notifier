@@ -2,7 +2,7 @@ const notificationId = 'colab8-notifier1-unique3-id0';
 let notificationTabId = null;
 
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.set({ thresholdMinutes: 15, notifySound: true, notifyMessage: true });
+    chrome.storage.sync.set({ thresholdMinutes: 0.0833, notifySound: true, notifyMessage: true });
 });
 
 chrome.runtime.onConnect.addListener(port => {
