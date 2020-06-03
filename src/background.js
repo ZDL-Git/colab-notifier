@@ -1,3 +1,6 @@
+const notificationId = 'colab8-notifier1-unique3-id0';
+let notificationTabId = null;
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({ thresholdMinutes: 15, notifySound: true, notifyMessage: true });
 });
@@ -16,24 +19,32 @@ chrome.runtime.onConnect.addListener(port => {
 
     if (port.name === 'cell-finished') {
         port.onMessage.addListener(message => {
+            notificationTabId = port.sender.tab.id;
             finishedRunning(message).then(result => port.postMessage(result));
         });
     }
 
 });
 
+chrome.notifications.onClicked.addListener(function (id) {
+    chrome.tabs.update(notificationTabId, {active: true});
+    chrome.notifications.clear(notificationId);
+});
+
 const audio = new Audio('./assets/sounds/Air Horn-SoundBible.com-964603082.wav');
-// audio.volume = 0.6;
+audio.volume = 0.6;
 
 function showFinishedCellNotification(runtime) {
-    const timestamp = new Date().getTime();
     const notificationOptions = {
         type: 'basic',
         title: 'Your Colab cell finished running!',
         message: 'Runtime: ' + msToTime(runtime),
-        iconUrl: './assets/icons/icon-128px.png'
+        iconUrl: './assets/icons/icon-128px.png',
+        requireInteraction: true,
     }
-    chrome.notifications.create('id ' + timestamp, notificationOptions);
+    chrome.notifications.clear(notificationId,function () {
+        chrome.notifications.create(notificationId, notificationOptions);
+    });
 }
 
 function playFinishedCellAudio() {
